@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Canvas Random Stuff</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="./jshint.js"></script>
+    <script type="module" src="./main.js"></script>
+</head>
+<body>
+    <div id="modal-backdrop"> </div>
+    <div class="modal help-container" id="help-container">
+        Write functions that return values to change the properties of the starfield.<br />
+        <span class="help-warn">Be <u>extremely</u> wary of running another users code in this!</span>
+        <h2>General</h2>
+        <p>Click the tabs to edit the text area for each function</p>
+        <p>Press <b>Submit</b> to submit the current tab</p>
+        <p>The first four functions are called once per frame on each line</p>
+        <p><i>Initial</i> functions are called when creating each line</p>
+        <p><b>Spawn Count</b> controls how many lines are created each frame</p>
+        <p><b>Lifetime</b> controls how long before the line is destroyed</p>
+        <h2>Functions</h2>
+        <h3>Return</h3>
+        <p><b>Angle:</b> Return a number (radians) to change the direction of the line</p>
+        <p><b>Speed</b>: Return a number (pixels per second) change the speed</p>
+        <p><b>Length</b>: Return a number (pixels) change the length</p>
+        <p><b>Color</b>: Return a CSS color definition as a string to change the color</p>
+        <h3>Object properties</h3>
+        <h4>Each function is passed an object (o) with several properties</h4>
+        <p><b>o.angle:</b> Current direction of line in radians</p>
+        <p><b>o.speed:</b> Current speed of line in pixels per second</p>
+        <p><b>o.length:</b> Current length of line in pixels</p>
+        <p><b>o.color:</b> Current color of line as a CSS color definition string</p>
+        <p><b>o.delta:</b> Seconds since last frame</p>
+        <p><b>o.timestamp:</b> Milliseconds since document creation</p>
+        <p><b>o.startTime:</b> When this line was first created (equal to timestamp upon line creation)</p>
+        <p><b>o.endTime:</b> When this line will be destroyed</p>
+        <p><b>o.kill:</b> Callable function to destroy the line immediately</p>
+        <p><b>o.line:</b> Raw line array used when drawing ([x1, y1, x2, y2, color])</p>
+        <h3>Initial functions are passed an object with a different set of properties</h3>
+        <p><b>o.timestamp:</b> Milliseconds since document creation</p>
+        <p><b>o.spawnCount:</b> Number of lines spawning per frame</p>
+        <p><b>o.index:</b> Index of line in spawn loop (each line spawned in a frame will have a different index) </p>
+        <p><b>o.angle:</b> Angle of spawned line (exclusive to Initial Speed, Length, and Color)</p>
+        <p><b>o.speed:</b> Speed of spawned line (exclusive to Initial Length and Color)</p>
+        <p><b>o.length:</b> Length of spawned line (exclusive to Initial Color)</p>
+        <h2>Other Controls</h2>
+        <p><b>Select and Load</b> presets to see example patterns (Beware: this will overwrite your current settings!)</p>
+        <p><b>Export Current</b> will export the selected tabs contents as JSON that can be imported</p>
+        <p><b>Export Full</b> will export all tabs contents as JSON that can be imported</p>
+        <p><b>Import</b> will import contents from the JSON box into the tabs (and overwrite anything in them!)</p>
+        <button class="close-modal-button">Close</button>
+    </div>
+    <div class="show-hide-container">
+        <button id="show-button">Show Controls</button>
+        <button id="hide-button">Hide Controls</button>
+    </div>
+    <div class="controls" id="controls">
+        <div class="tabs">
+            <button id="angle-display-button">Angle</button>
+            <button id="speed-display-button">Speed</button>
+            <button id="length-display-button">Length</button>
+            <button id="color-display-button">Color</button>
+            <button id="initial-angle-display-button">Initial Angle</button>
+            <button id="initial-speed-display-button">Initial Speed</button>
+            <button id="initial-length-display-button">Initial Length</button>
+            <button id="initial-color-display-button">Initial Color</button>
+            <button id="help-button">Help!</button>
+        </div>
+        <div class="function-input-container">
+            <textarea spellcheck="false" cols="100" rows="12" data-key="angleMod" id="angle-mod-text-area">mv => mv.angle + 0.0025 * mv.delta * mv.speed</textarea>
+            <button id="angle-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="speedMod" id="speed-mod-text-area">mv => mv.speed</textarea>
+            <button id="speed-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="lengthMod" id="length-mod-text-area">mv => mv.speed * .1</textarea>
+            <button id="length-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="colorMod" id="color-mod-text-area">mv => mv.color</textarea>
+            <button id="color-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="initialAngleMod" id="initial-angle-mod-text-area">sv => Math.random() * Math.PI * 2</textarea>
+            <button id="initial-angle-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="initialSpeedMod" id="initial-speed-mod-text-area">sv => 120 + Math.random() * 120</textarea>
+            <button id="initial-speed-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="initialLengthMod" id="initial-length-mod-text-area">sv => 10</textarea>
+            <button id="initial-length-mod-submit">Submit</button>
+            <textarea spellcheck="false" cols="100" rows="12" data-key="initialColorMod" id="initial-color-mod-text-area">sv => 'rgb(255,0,0)'</textarea>
+            <button id="initial-color-mod-submit">Submit</button>
+            <button id="submit-all">Submit All</button>
+        </div>
+        <div class="controls-misc">
+            <div class="controls-nontext">
+                <h4>Other settings</h4>
+                <label for="spawn-count-input">Spawn Count</label>
+                <input id="spawn-count-input" type="range" min="1" max="12" step="1" value="1" />
+                <span class="value-display" data-targetid="spawn-count-input">1</span>
+                <br />
+                <label for="lifetime-input">Lifetime</label>
+                <input id="lifetime-input" type="range" min="100" max="30000" step="100" value="15000" />
+                <span class="value-display" data-targetid="lifetime-input">15000</span>
+            </div>
+            <div class="controls-saveload">
+                <h4>Saving / Loading</h4>
+                <select id="preset-select"></select>
+                <button id="load-preset">Load</button>
+                <br />
+                <textarea spellcheck="false" id="json-text-area" placeholder="JSON"></textarea>
+                <br />
+                <button id="json-export-current">Export Current</button>
+                <br />
+                <button id="json-export-full">Export Full</button>
+                <button id="json-import-full">Import</button>
+            </div>
+        </div>
+    </div>
+    <div class="canvas-container">
+        <canvas id="canvas" width="1280" height="800">
+            Something is wrong if you see this text...
+        </canvas>
+    </div>
+</body>
+</html>
