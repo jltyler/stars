@@ -1,24 +1,4 @@
 import presets from './presets.js';
-import jslint from './jslint.js';
-// import {JSHINT} from './jshint.js';
-
-const lintOptions = {
-    esversion: 6,
-    undef: true,
-    asi: true,
-    expr: true,
-    // browser: true,
-};
-
-const hmm = JSHINT("mv => mv.angle + Math.sin(window)", lintOptions);
-console.log('JSHint passed?:', hmm);
-if (!hmm) {
-    JSHINT.errors.forEach((e) => {
-        console.warn(e.reason);
-    });
-}
-// console.log(JSHINT.errors);
-console.log(JSHINT.data());
 
 console.log('Loading ui.js');
 
@@ -52,27 +32,6 @@ const getLifetime = () => lifetime;
 const safeMode = false;
 
 let currentTextArea = 0;
-
-// const cleanScope = function (f) {
-//     let window, alert, document;
-//     return (function (f).bind(null);
-// };
-
-const submitAngleMod = function (value) {
-    let window, alert, document;
-    const oldAngleModEval = angleModEval;
-    const jsHintResult = JSHINT(value, lintOptions);
-    console.log("submitAngleMod Passed?:", jsHintResult);
-    if (!jsHintResult) {
-        JSHINT.errors.forEach((e) => {
-            console.warn(e.reason);
-        });
-    }
-    console.log(JSHINT.data());
-    if (jsHintResult && JSHINT.data().functions.length === 1) {
-        angleModEval = eval(value);
-    }
-};
 
 const bindEvents = () => {
     console.log('Binding events...');
@@ -110,7 +69,8 @@ const bindEvents = () => {
 
 
     // Read text input
-    angleModSubmit.addEventListener('click', () => {submitAngleMod(angleModTextArea.value); console.log('angleModEval:', angleModEval)});
+    // angleModSubmit.addEventListener('click', () => {submitAngleMod(angleModTextArea.value); console.log('angleModEval:', angleModEval)});
+    angleModSubmit.addEventListener('click', e => {angleModEval = eval(angleModTextArea.value); console.log('angleModEval:', angleModEval)});
     speedModSubmit.addEventListener('click', e => {speedModEval = eval(speedModTextArea.value); console.log('speedModEval:', speedModEval)});
     lengthModSubmit.addEventListener('click', e => {lengthModEval = eval(lengthModTextArea.value); console.log('lengthModEval:', lengthModEval)});
     colorModSubmit.addEventListener('click', e => {colorModEval = eval(colorModTextArea.value); console.log('colorModEval:', colorModEval)});
