@@ -337,7 +337,9 @@ const bindEvents = () => {
     });
 
     showAngleMod();
+    loadPresetEvent();
     submitAllEvent();
+
 };
 
 export default {

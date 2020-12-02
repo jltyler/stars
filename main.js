@@ -53,7 +53,7 @@ const doStuff = () => {
         ctx.stroke();
     };
 
-    const newLine = (x, y, angle, speed, length, color, options = {}) => {
+    const newLine = (x, y, angle, speed, length, color, spawnIndex, options = {}) => {
         const myOptions = {...defaultOptions, ...options};
         // console.log(myOptions);
 
@@ -83,7 +83,7 @@ const doStuff = () => {
             drawLine(...line);
 
             const modValues = {
-                line, angle, speed, delta, timestamp, startTime, endTime, length, color: line[4], kill: () => delete updateDict[myIndex],
+                line, angle, speed, delta, timestamp, startTime, endTime, length, color: line[4], index: spawnIndex, kill: () => delete updateDict[myIndex],
             };
             if (typeof ui.getAngleModEval() === 'function')
                 angle = ui.getAngleModEval()(modValues);
@@ -144,7 +144,7 @@ const doStuff = () => {
             newLine(
                 canvasCenterX, canvasCenterY,
                 angle, speed, length,
-                color);
+                color, i);
         }
         window.requestAnimationFrame(update);
     };
